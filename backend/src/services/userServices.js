@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { User } = require("../resources/db");
+const AppError = require("../errors/error");
 const createUserDTO = require("../dtos/userDTO");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -12,11 +13,10 @@ const login = async (body) => {
         where: { login: body.login }
     });
 
-    const match = await bcrypt.compare(body.password, findUser.password)
-    console.log(match)
+    
 
-    if (!findUser || match) {
-        return { message: "Credenciais inválidas ou usuário não existe!!!", statusCode: 404 }
+    if (!findUser || !bcrypt.compareSync(body.password, findUser.password)) {
+        throw new AppError("Usuário não existe ou credenciais incorretas!!!", 401);
     }
 
     const token = jwt.sign(
