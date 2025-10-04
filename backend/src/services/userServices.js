@@ -15,7 +15,7 @@ const login = async (body) => {
     const match = await bcrypt.compare(body.password, findUser.password)
     console.log(match)
 
-    if (!findUser || !match) {
+    if (!findUser || match) {
         return { message: "Credenciais inválidas ou usuário não existe!!!", statusCode: 404 }
     }
 
