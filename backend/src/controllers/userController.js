@@ -6,7 +6,8 @@ const login = async (request, response) => {
         "token", token, {
             httpOnly: true,
             secure: false,
-            sameSite: "Lax"
+            sameSite: "Lax",
+            maxAge: 30 * 60 * 1000,
         }
     )
 
